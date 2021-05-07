@@ -10,6 +10,7 @@ symbolTicker = 'BTCUSDT'
 precioAnterior = 0
 quantityOrders = 400
 compra = False
+ganancia = 0
 
 
 #Encontrar el valor de la moneda
@@ -38,10 +39,12 @@ while 1:
     #print("Se desea comprar a: ", (precioAnterior+(precioAnterior*.001)))    
     if ((precioAnterior+(precioAnterior*.001)) < (precioActual)):
         print("Se vendio a: ", precioActual) 
+        ganancia += ((precioActual - (precioAnterior-(precioAnterior*.001)))*(1000/precioAnterior))
         order = client.order_market_sell(
             symbol = symbolTicker,
             quantity = 0.00022
         )
+        print("Ganancia: ", ganancia)
         compra = True
         precioAnterior = precioActual
         
@@ -72,3 +75,5 @@ while 1:
     else:
         print("El precio es menor, paso")
         print("El precio es de: ", precioActual)
+        print("Ganancia: ", ganancia)
+        
