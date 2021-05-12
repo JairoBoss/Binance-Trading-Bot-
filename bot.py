@@ -1,4 +1,5 @@
 import config
+import func
 from binance.client import Client
 from binance.enums import *
 import time
@@ -18,13 +19,17 @@ porcentaje_comision = .00075
 
 while 1:
     klines = client.get_klines(symbol=symbolTicker, interval=Client.KLINE_INTERVAL_5MINUTE)
+    klines_h = client.get_klines(symbol=symbolTicker, interval=Client.KLINE_INTERVAL_1MINUTE)
+
+    media_min = func.media_min_klines(klines_h)
+
     # Encontrar el valor de la moneda
     list_of_tickers = client.get_all_tickers()
     for tick_2 in list_of_tickers:
         if tick_2["symbol"] == symbolTicker:
             precioCompra = float(tick_2["price"])
 
-    if ((precioCompra <= float(klines[len(klines)-1][3]))):  
+    if ((precioCompra <= float(klines[len(klines)-1][3]) and (precioCompra <= media_min))):  
         'or ((precioCompra <= (float(klines[len(klines)-1][3]))) + (float(klines[len(klines)-1][3])*.01)'
         print("*** Compra inicial ***")
         print("Se compro a: ", precioCompra)
@@ -36,6 +41,7 @@ while 1:
     else:
         print("\nPrecio actual",precioCompra)
         print("\nPrecio mínimo de 5 min",float(klines[len(klines)-1][3]))
+        print("\nMedia de precio mínimo de 30 mins", media_min)
         print("\nbuscando precio..")
 
 while 1:
@@ -80,6 +86,11 @@ while 1:
         while 1:
             klines = client.get_klines(symbol=symbolTicker, interval=Client.KLINE_INTERVAL_5MINUTE) 
 
+            
+            klines_h = client.get_klines(symbol=symbolTicker, interval=Client.KLINE_INTERVAL_1MINUTE)
+    
+            media_min = func.media_min_klines(klines_h)
+
             list_of_tickers = client.get_all_tickers()
             for tick_2 in list_of_tickers:
                 if tick_2["symbol"] == symbolTicker:
@@ -87,9 +98,10 @@ while 1:
 
             print("\nPrecio actual",precioCompra)
             print("\nPrecio mínimo de 5 min",float(klines[len(klines)-1][3]))
+            print("\nMedia de precio mínimo de 30 mins", media_min)
             print("\nbuscando precio..")  
 
-            if ((precioCompra <= float(klines[len(klines)-1][3]))):
+            if ((precioCompra <= float(klines[len(klines)-1][3]) and (precioCompra <= media_min))):
                 print("Se compra a: ", precioCompra)
                 # order = client.order_market_buy(
                 #symbol = symbolTicker,
