@@ -46,6 +46,8 @@ while 1:
         if tick_2["symbol"] == symbolTicker:
             precioActual = float(tick_2["price"])
 
+    klines = client.get_klines(symbol=symbolTicker, interval=Client.KLINE_INTERVAL_5MINUTE)        
+
     maximo = klines[len(klines)-1][2]
     minimo = klines[len(klines)-1][3]
 
@@ -76,19 +78,19 @@ while 1:
         time.sleep(15)
 
         while 1:
+            klines = client.get_klines(symbol=symbolTicker, interval=Client.KLINE_INTERVAL_5MINUTE) 
 
             list_of_tickers = client.get_all_tickers()
             for tick_2 in list_of_tickers:
                 if tick_2["symbol"] == symbolTicker:
-                    precioActual = float(tick_2["price"])
+                    precioCompra = float(tick_2["price"])
 
-            print(
-                ".---------------------------------------------------------------------.")
-            print(
-                "Buscando un precio optimo para comprar, el precio actual es de:", precioActual)
+            print("\nPrecio actual",precioCompra)
+            print("\nPrecio mínimo de 5 min",float(klines[len(klines)-1][3]))
+            print("\nbuscando precio..")  
 
             if ((precioCompra <= float(klines[len(klines)-1][3]))):
-                print("Se compra a: ", precioActual)
+                print("Se compra a: ", precioCompra)
                 # order = client.order_market_buy(
                 #symbol = symbolTicker,
                 #quantity = quantityOrders
