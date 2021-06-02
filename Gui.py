@@ -156,6 +156,7 @@ class A:
 
             if ((self.precioCompra >= max*.991) and ((self.precioCompra >= ((media_max+max)/2)*.991))): 
 #                ws.MessageBeep(type=1)
+                #lbl1 = ("Precio de compra: ", precioCompra, "")
 
                 list_of_tickers = client.get_all_tickers()
                 for tick_2 in list_of_tickers:
@@ -168,15 +169,15 @@ class A:
                 gananciaTR = ((precioActual - self.precioCompra)*(inversion / self.precioCompra)-comisionCompra-comisionVenta)
 
                 if (((comisionCompra+comisionVenta) < ((precioActual - self.precioCompra)*(inversion/self.precioCompra))) or (gananciaTR <= (-inversion*.02))):
-                   # ws.MessageBeep(type=1)
-                    
+                   # ws.MessageBeep(type=1)                                       
                     ganancia += (precioActual - self.precioCompra)*(inversion / self.precioCompra)-comisionCompra-comisionVenta
                     
-                    texto = ('Se vendió a: ', precioActual, ' ganó: ', gananciaTR)      
-                    precioCompra = 0                        
-
-            self.lblGanaciasDinero.configure(text = gananciaTR) 
-            self.lblGanaciasDinero.after(2500, self.update_label)             
+                    texto = ('Se vendió a: ', precioActual, ' ganó: ', gananciaTR)                          
+                    self.precioCompra = 0                        
+                    
+            
+            self.lblGanaciasDinero.configure(text = round(gananciaTR,3))
+            self.lblGanaciasDinero.after(2500, self.update_label)
         
             self.lblPerdidaDinero.configure(text = self.precioCompra)
             #self.lblPerdidaDinero.after(5000, self.update_label) 
