@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import *
 import time
 from tkinter.constants import X
 from PIL import Image, ImageTk
@@ -23,6 +24,19 @@ ganancia = 0
 inversion = 1000
 porcentaje_comision = .00075
 
+root = tk.Tk(className='Binance Trading bot')
+root.geometry("0x0")
+
+
+def x():    
+        
+    
+    root.geometry("1000x310")
+    root.configure(bg='white')
+    root1.destroy()
+
+    A(root)  
+    root.mainloop()
 
 #245 280
 class A:
@@ -45,8 +59,7 @@ class A:
         self.tkimage = ImageTk.PhotoImage(self.img)
         self.lblImg = tk.Label(root)
         self.lblImg.configure(image=self.tkimage)
-        self.lblImg.grid()
-        #self.lblImg = tk.Label(root, image = self.tkimage).grid()         
+        self.lblImg.grid()      
 
         self.lbltiempo = tk.Label(master)
         self.lbltiempo.configure(text ='Tiempo x Minuto')
@@ -58,7 +71,6 @@ class A:
         self.lbltiempo.place(relx = .471, rely = .23090)
         self.lbltiempo.configure(bg='white')
 
-        
         self.lblGanacias = tk.Label(master)
         self.lblGanacias.configure(text ='Ganancias ')
         self.lblGanacias.place(relx = .560, rely = .1090)
@@ -135,7 +147,7 @@ class A:
                 list_of_tickers = client.get_all_tickers()
                 for tick_2 in list_of_tickers:
                     if tick_2["symbol"] == symbolTicker:
-                        self.precioCompra = float(tick_2["price"])
+                        self.precioCompra = float(tick_2["price"])            
 
             if ((self.precioCompra >= max*.991) and ((self.precioCompra >= ((media_max+max)/2)*.991))): 
                 ws.MessageBeep(type=1)
@@ -143,7 +155,9 @@ class A:
                 list_of_tickers = client.get_all_tickers()
                 for tick_2 in list_of_tickers:
                     if tick_2["symbol"] == symbolTicker:
-                        precioActual = float(tick_2["price"])
+                        precioActual = float(tick_2["price"])      
+
+                self.lblPerdidaDinero.configure(text = round(precioActual,3))                                             
 
                 comisionCompra = (inversion*porcentaje_comision)
                 comisionVenta = (inversion+((precioActual-self.precioCompra) /precioActual))*porcentaje_comision
@@ -156,13 +170,11 @@ class A:
                     ganancia += (precioActual - self.precioCompra)*(inversion / self.precioCompra)-comisionCompra-comisionVenta
                     
                     texto = ('Se vendió a: ', precioActual, ' ganó: ', gananciaTR)      
-                    precioCompra = 0                        
+                    self.precioCompra= 0                        
 
             self.lblGanaciasDinero.configure(text = gananciaTR) 
-            self.lblGanaciasDinero.after(2500, self.update_label)             
-        
-            self.lblPerdidaDinero.configure(text = self.precioCompra)
-            #self.lblPerdidaDinero.after(5000, self.update_label) 
+            self.lblGanaciasDinero.after(2500, self.update_label)                                 
+            
 
             klines = client.get_klines(symbol=symbolTicker, interval=Client.KLINE_INTERVAL_1MINUTE)
             precio = [float(klines[len(klines)-1][2]),float(klines[len(klines)-2][2]),float(klines[len(klines)-3][2]),float(klines[len(klines)-4][2]),float(klines[len(klines)-5][2]), float(klines[len(klines)-6][2]), float(klines[len(klines)-7][2]), float(klines[len(klines)-8][2]), float(klines[len(klines)-9][2]), float(klines[len(klines)-10][2])]
@@ -200,19 +212,29 @@ class A:
 
             self.count += 1
 
-
-root = tk.Tk(className='Binance Trading bot')
-root.geometry("1000x310")
-root.configure(bg='white')
-precioCompra = 0
-
-A(root)     
-
-root.mainloop()
+root1 = tk.Tk(className='LOGINNNNNNNN')
+root1.geometry("1000x310")
 
 
+lblInicio = tk.Label(root1, text="Ingresa tus credenciales").pack()
 
-    
+usuarioString = StringVar()
+passwordString = StringVar()
+
+lblLogin = tk.Label(root1, text="Usuario : ").pack()
+
+username_login_entry = Entry(root1, textvariable=usuarioString)
+username_login_entry.pack()
+
+lblPassword = tk.Label(root1, text="Contraseña : ").pack()
+
+password_login_entry = Entry(root1, textvariable=passwordString, show= '*')
+password_login_entry.pack()
+
+   
+
+botoncito = tk.Button(root1, text="Login", command=x).pack()
+root1.mainloop()
 
 
 
