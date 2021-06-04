@@ -1,9 +1,7 @@
 import tkinter as tk
 from tkinter import *
-
 import time
 from tkinter.constants import X
-from typing import ForwardRef
 from PIL import Image, ImageTk
 import threading
 import config
@@ -26,20 +24,25 @@ ganancia = 0
 inversion = 1000
 porcentaje_comision = .00075
 
-precioCompra = 0
 root = tk.Tk(className='Binance Trading bot')
 root.geometry("0x0")
 
-def x():    
-        
+def userIncorrect():
+    top = Toplevel()
+    top.title("Usuario incorrecto")
+    top.geometry("200x50")
+    l2 = Label(top, text = "Porfavor ingresa un usuario correcto")
+    l2.pack()
     
+
+def x():    
     root.geometry("1000x310")
     root.configure(bg='white')
-    precioCompra = 0
     root1.destroy()
 
     A(root)  
-    root.mainloop()
+    root.mainloop()    
+    
 
 #245 280
 class A:
@@ -62,8 +65,7 @@ class A:
         self.tkimage = ImageTk.PhotoImage(self.img)
         self.lblImg = tk.Label(root)
         self.lblImg.configure(image=self.tkimage)
-        self.lblImg.grid()
-        #self.lblImg = tk.Label(root, image = self.tkimage).grid()         
+        self.lblImg.grid()      
 
         self.lbltiempo = tk.Label(master)
         self.lbltiempo.configure(text ='Tiempo x Minuto')
@@ -75,7 +77,6 @@ class A:
         self.lbltiempo.place(relx = .471, rely = .23090)
         self.lbltiempo.configure(bg='white')
 
-        
         self.lblGanacias = tk.Label(master)
         self.lblGanacias.configure(text ='Ganancias ')
         self.lblGanacias.place(relx = .560, rely = .1090)
@@ -152,16 +153,17 @@ class A:
                 list_of_tickers = client.get_all_tickers()
                 for tick_2 in list_of_tickers:
                     if tick_2["symbol"] == symbolTicker:
-                        self.precioCompra = float(tick_2["price"])
+                        self.precioCompra = float(tick_2["price"])            
 
             if ((self.precioCompra >= max*.991) and ((self.precioCompra >= ((media_max+max)/2)*.991))): 
-#                ws.MessageBeep(type=1)
-                #lbl1 = ("Precio de compra: ", precioCompra, "")
+                #.MessageBeep(type=1)
 
                 list_of_tickers = client.get_all_tickers()
                 for tick_2 in list_of_tickers:
                     if tick_2["symbol"] == symbolTicker:
-                        precioActual = float(tick_2["price"])
+                        precioActual = float(tick_2["price"])      
+
+                self.lblPerdidaDinero.configure(text = round(precioActual,3))                                             
 
                 comisionCompra = (inversion*porcentaje_comision)
                 comisionVenta = (inversion+((precioActual-self.precioCompra) /precioActual))*porcentaje_comision
@@ -169,18 +171,16 @@ class A:
                 gananciaTR = ((precioActual - self.precioCompra)*(inversion / self.precioCompra)-comisionCompra-comisionVenta)
 
                 if (((comisionCompra+comisionVenta) < ((precioActual - self.precioCompra)*(inversion/self.precioCompra))) or (gananciaTR <= (-inversion*.02))):
-                   # ws.MessageBeep(type=1)                                       
+                    #ws.MessageBeep(type=1)
+                    
                     ganancia += (precioActual - self.precioCompra)*(inversion / self.precioCompra)-comisionCompra-comisionVenta
                     
-                    texto = ('Se vendió a: ', precioActual, ' ganó: ', gananciaTR)                          
-                    self.precioCompra = 0                        
-                    
+                    texto = ('Se vendió a: ', precioActual, ' ganó: ', gananciaTR)      
+                    self.precioCompra= 0                        
+
+            self.lblGanaciasDinero.configure(text = gananciaTR) 
+            self.lblGanaciasDinero.after(2500, self.update_label)                                 
             
-            self.lblGanaciasDinero.configure(text = round(gananciaTR,3))
-            self.lblGanaciasDinero.after(2500, self.update_label)
-        
-            self.lblPerdidaDinero.configure(text = self.precioCompra)
-            #self.lblPerdidaDinero.after(5000, self.update_label) 
 
             klines = client.get_klines(symbol=symbolTicker, interval=Client.KLINE_INTERVAL_1MINUTE)
             precio = [float(klines[len(klines)-1][2]),float(klines[len(klines)-2][2]),float(klines[len(klines)-3][2]),float(klines[len(klines)-4][2]),float(klines[len(klines)-5][2]), float(klines[len(klines)-6][2]), float(klines[len(klines)-7][2]), float(klines[len(klines)-8][2]), float(klines[len(klines)-9][2]), float(klines[len(klines)-10][2])]
@@ -218,9 +218,7 @@ class A:
 
             self.count += 1
 
-
-
-root1 = tk.Tk(className='LOGINNNNNNNN')
+root1 = tk.Tk(className='Login')
 root1.geometry("1000x310")
 
 
