@@ -241,3 +241,12 @@ password_login_entry.pack()
 
 botoncito = tk.Button(root1, text="Login", command=x).pack()
 root1.mainloop()
+
+
+###
+usdt = 29.28406905
+comision = round((usdt * .001),8)
+total = 29.29 - comision
+print(f"La comision es de: {comision}")
+print(f"El total es: {total}")
+###
